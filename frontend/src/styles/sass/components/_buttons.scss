@@ -1,0 +1,44 @@
+
+.btn {
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    gap : 1em;
+    padding : .5em 2em;
+    border-radius: var(--default-radius);
+    color : var(--clr-neutral-100);
+    cursor: pointer;
+
+
+    &__edit {
+        background-color: var(--clr-primary-300);
+        &:hover {
+            background-color: var(--clr-primary-310);
+        }
+        &:focus, &:active {
+            background-color: var(--clr-primary-350);
+        }
+    }
+
+    &__delete {
+        background-color: var(--clr-primary-400);
+        &:hover {
+            background-color: var(--clr-primary-410);
+        }
+        &:focus, &:active {
+            background-color: var(--clr-primary-450);
+        }
+    }
+    &__new {
+        background-color: var(--clr-neutral-300);
+        color : var(--clr-primary-900);
+
+        &:hover {
+            background-color: var(--clr-neutral-100)
+        }
+
+        &:focus, &:active{
+            background-color: var(--clr-neutral-400)
+        }
+    }
+}

@@ -1,0 +1,23 @@
+@use "../abstracts/" as *;
+
+:root {
+  // colors
+  @each $clr, $shades in $colors {
+    @each $key, $value in $shades {
+      --clr-#{$clr}-#{$key}: #{$value};
+    }
+  }
+
+  //   fonts sizes
+  @each $key, $value in $font-sizes {
+    --fs-#{$key}: #{$value};
+  }
+
+  //   fonts weights
+  @each $key, $value in $font-weights {
+    --fw-#{$key}: #{$value};
+  }
+
+  --ff-primary : 'EB Garamond', serif;
+  --default-radius: .5rem;
+}
