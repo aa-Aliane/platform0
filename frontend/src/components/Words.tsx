@@ -3,7 +3,7 @@ import Button from "./Button";
 
 import { useWords } from "../hooks/wordsState";
 import { api } from "../services/api";
-
+import { useNavigate } from "react-router";
 
 const actions: any = {
   INIT: "INIT",
@@ -55,10 +55,11 @@ const Words: React.FC = () => {
 
   const [wordsState, wordsDispatch] = useReducer(wordsReducer, []);
 
+  const navigate = useNavigate();
 
   useEffect(() => {
     api.get("words").then((res: any) => {
-      console.log(res.data)
+      console.log(res.data);
       init_words(res.data.map((w: any) => ({ ...w, is_deleted: "false" })));
     });
   }, []);
@@ -72,20 +73,19 @@ const Words: React.FC = () => {
   }, [words]);
 
   const HandleClick = (icon: string, index: number, id: number) => {
-
     if (icon === "delete") {
       delete_word(index);
       wordsDispatch({
         type: "DELETE",
         payload: index,
       });
-      console.log(index)
-      api.delete("words/"+String(id))
+      console.log(index);
+      api.delete("words/" + String(id));
     }
     if (icon === "edit") {
-      console.log("edit");
+      console.log("edit ", id);
+      navigate("change_word", { state: { word: id } });
     }
-
   };
 
   return (

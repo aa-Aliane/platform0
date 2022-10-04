@@ -44,6 +44,9 @@
   gap: 2rem;
   flex-wrap: wrap;
   direction: rtl;
+  background-color: var(--clr-neutral-100);
+  padding : 1rem;
+  border-radius: var(--default-radius);
 
   &__title {
       width: 20%;

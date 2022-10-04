@@ -183,6 +183,9 @@ body {
   gap: 2rem;
   flex-wrap: wrap;
   direction: rtl;
+  background-color: var(--clr-neutral-100);
+  padding: 1rem;
+  border-radius: var(--default-radius);
 }
 .keywords__title {
   width: 20%;

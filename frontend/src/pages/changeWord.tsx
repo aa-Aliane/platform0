@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Context from "../components/Context";
 import { useNewContext } from "../hooks/variablesState";
+import { useLocation } from "react-router-dom";
+import { api } from "../services/api";
 
 const NewWord = () => {
+  //   const [addContext, setAddContext] = useState(false);
+  const addContext = useNewContext((state: any) => state.newContext);
+  const change_context = useNewContext((state: any) => state.change_context);
 
-//   const [addContext, setAddContext] = useState(false);
-  const addContext = useNewContext((state: any) => state.newContext)
-  const change_context = useNewContext((state: any) => state.change_context)
+  const location = useLocation();
+  const word = location.state.word;
+
+  useEffect(()=>{
+      api.get('get_word')
+  },[])
 
   return (
     <div className="main--container">
@@ -25,7 +33,14 @@ const NewWord = () => {
 
       <div className="contexts">
         <h2 className="title">السياقات</h2>
-        {!addContext && <button className="btn btn__new context__new" onClick={()=>change_context()}>إظافة سياق</button>}
+        {!addContext && (
+          <button
+            className="btn btn__new context__new"
+            onClick={() => change_context()}
+          >
+            إظافة سياق{word}
+          </button>
+        )}
         {addContext && <Context />}
       </div>
     </div>

@@ -1,10 +1,20 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useNewContext } from "../hooks/variablesState";
+
+
+export interface ContextType {
+    word_id : number,
+    context: string,
+    keywords: string[]
+    ref: string,
+}
 
 const Context = () => {
   const [keyword, setKeyword] = useState<String>("");
   const [keywords, setKeywords] = useState<String[]>([]);
+  const change_context = useNewContext((state: any) => state.change_context)
 
   return (
     <div className="context--container">
@@ -44,13 +54,13 @@ const Context = () => {
       </div>
 
       <div className="ref--container">
-          <h2 className="ref">المرجع</h2>
-          <input type="text"/>
+        <h2 className="ref">المرجع</h2>
+        <input type="text" />
       </div>
 
       <div className="control">
-          <button className="btn btn__edit">إضافة</button>
-          <button className="btn btn__delete">إلغاء</button>
+        <button className="btn btn__delete" onClick={() => change_context()}>إلغاء</button>
+        <button className="btn btn__edit">إضافة</button>
       </div>
     </div>
   );
