@@ -110,6 +110,12 @@ body {
   padding: 10rem 0;
 }
 
+.line--container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .words {
   display: flex;
   flex-direction: column;

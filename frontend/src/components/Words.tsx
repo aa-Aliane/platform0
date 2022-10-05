@@ -4,13 +4,9 @@ import Button from "./Button";
 import { useWords } from "../hooks/wordsState";
 import { api } from "../services/api";
 import { useNavigate } from "react-router";
+import { actions } from "../hooks/actions";
 
-const actions: any = {
-  INIT: "INIT",
-  PRE_DELETE: "PRE_DELETE",
-  DELETE: "DELETE",
-  RELOAD: "RELOAD",
-};
+
 
 export interface wordType {
   id: number;
@@ -59,7 +55,6 @@ const Words: React.FC = () => {
 
   useEffect(() => {
     api.get("words").then((res: any) => {
-      console.log(res.data);
       init_words(res.data.map((w: any) => ({ ...w, is_deleted: "false" })));
     });
   }, []);
@@ -83,7 +78,7 @@ const Words: React.FC = () => {
       api.delete("words/" + String(id));
     }
     if (icon === "edit") {
-      console.log("edit ", id);
+      console.log("edit", id);
       navigate("change_word", { state: { word: id } });
     }
   };

@@ -5,9 +5,10 @@ import {
   faPenToSquare,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { wordType } from "./Words";
 
 
-type HandleClickType = (icon: string, index:number, id:number) => void;
+export type HandleClickType = (icon: string, index:number, id:number) => void;
 
 
 
