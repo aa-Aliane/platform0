@@ -68,10 +68,7 @@ const ChangeWord = () => {
   }, []);
 
   useEffect(() => {
-    contextsDispatch({
-      type: actions.RELOAD,
-      payload: contexts,
-    });
+    console.log("ohh ", contexts)
   }, [contexts]);
 
   const HandleDelete = (index: number, id: number = 0) => {
@@ -109,6 +106,7 @@ const ChangeWord = () => {
           </button>
         )}
         {addContext && <Context word_id={-1} index={-1} />}
+        {String(addContext)}
       </div>
       {contexts.map((c: any, index: number) => (
         <>

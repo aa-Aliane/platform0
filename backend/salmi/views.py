@@ -22,17 +22,15 @@ class ContextViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     
 
-@api_view(['GET'])
-@permission_classes(['AllowAny'])    
-def get_context(request):
-    serializer = ContextSerializer
-    context = Context.objects.get(word = request.data['word_id'])
-    response = serializer(context, many=True)
-    
-    return Response(status=status.HTTP_200_OK, data=response)
-
 @api_view(['POST'])
-@permission_classes(['AllowAny'])    
+def get_context(request):
+    word = Word.objects.get(id = request.data['word_id'])
+    context = Context.objects.filter(word = request.data['word_id'])
+    response = ContextSerializer(context, many=True)
+    
+    return Response(status=status.HTTP_200_OK, data=response.data)
+
+@api_view(['POST'])   
 def post_context(request):
     serializer = ContextSerializer
     word = Word.objects.get(id = request.data['word_id'])

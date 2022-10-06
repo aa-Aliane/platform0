@@ -1,9 +1,10 @@
 from django.urls import include, path
-from .views import WordViewSet, get_context, post_context
+from .views import WordViewSet, ContextViewSet, get_context, post_context
 from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('words', WordViewSet)
+router.register('contexts', ContextViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

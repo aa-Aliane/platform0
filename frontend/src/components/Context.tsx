@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useNewContext, usePreviews } from "../hooks/variablesState";
@@ -6,20 +6,25 @@ import { useNewContext, usePreviews } from "../hooks/variablesState";
 import { useContext } from "../hooks/contextState";
 import useInput from "../hooks/useInputs";
 
-const Context = ({word_id, index}: {word_id:number, index: number}) => {
+const Context = ({ word_id, index }: { word_id: number; index: number }) => {
   const [keyword, setKeyword] = useState<String>("");
   const [keywords, setKeywords] = useState<String[]>([]);
   const change_context = useNewContext((state: any) => state.change_context);
 
   const add_context = useContext((state: any) => state.add_context);
-  const add_preview = usePreviews((state:any) => state.add_preview)
-  const previews = usePreviews((state: any) => state.previews)
+  const add_preview = usePreviews((state: any) => state.add_preview);
+  const previews = usePreviews((state: any) => state.previews);
+  const close_all = usePreviews((state: any) => state.close_all);
 
   const [context, setContext] = useInput({
     context: "",
     keywords: "",
     ref: "",
   });
+
+  useEffect(() => {
+    close_all();
+  }, []);
 
   return (
     <div className="context--container">
@@ -64,25 +69,34 @@ const Context = ({word_id, index}: {word_id:number, index: number}) => {
 
       <div className="ref--container">
         <h2 className="ref">المرجع</h2>
-        <input type="text" value={context.ref} onChange={(e) => setContext(e.target.value, 'ref')}/>
+        <input
+          type="text"
+          value={context.ref}
+          onChange={(e) => setContext(e.target.value, "ref")}
+        />
       </div>
 
       <div className="control">
         <button className="btn btn__delete" onClick={() => change_context()}>
           إلغاء
         </button>
-        <button className="btn btn__edit" onClick={()=>{
-          const c = {
-            id: -1,
-            word_id: -1,
-            context: context.context,
-            ref: context.ref,
-            keywords: keywords.join(' ')
-          };
-          add_context(c)
-          add_preview(false)
-          console.log(previews)
-        }}>إضافة</button>
+        <button
+          className="btn btn__edit"
+          onClick={() => {
+            const c = {
+              id: -1,
+              word_id: -1,
+              context: context.context,
+              ref: context.ref,
+              keywords: keywords.join(" "),
+            };
+            add_context(c);
+            add_preview(false);
+            console.log(previews);
+          }}
+        >
+          إضافة
+        </button>
       </div>
     </div>
   );

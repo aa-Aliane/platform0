@@ -11,13 +11,19 @@ const OldContext = ({ word_id, index }: { word_id: number; index: number }) => {
   const [keywords, setKeywords] = useState<String[]>([]);
 
   const change_preview = usePreviews((state: any) => state.change_preview);
-  const update_context = useContext((state: any) => state.add_context);
+  const update_context = useContext((state: any) => state.update_context);
+  const old_context = useContext((state: any) => state.contexts[index]);
+
 
   const [context, setContext] = useInput({
-    context: "",
-    keywords: "",
-    ref: "",
+    context: old_context.context,
+    keywords: old_context.keywords,
+    ref: old_context.ref,
   });
+
+  useEffect(() => {
+    setKeywords(old_context.keywords.split(" "));
+  }, []);
 
   return (
     <div className="context--container">
@@ -42,6 +48,7 @@ const OldContext = ({ word_id, index }: { word_id: number; index: number }) => {
             onKeyDown={(e) => {
               if (e.keyCode === 13) {
                 setKeywords([...keywords, keyword]);
+                setContext(context.keywords + " " + keyword, "keywords");
                 setKeyword("");
               }
             }}
@@ -62,7 +69,11 @@ const OldContext = ({ word_id, index }: { word_id: number; index: number }) => {
 
       <div className="ref--container">
         <h2 className="ref">المرجع</h2>
-        <input type="text" value={context.ref} onChange={(e) => setContext(e.target.value, 'ref')}/>
+        <input
+          type="text"
+          value={context.ref}
+          onChange={(e) => setContext(e.target.value, "ref")}
+        />
       </div>
 
       <div className="control">
@@ -74,7 +85,10 @@ const OldContext = ({ word_id, index }: { word_id: number; index: number }) => {
         </button>
         <button
           className="btn btn__edit"
-          onClick={() => {update_context(index, context); change_preview(index)}}
+          onClick={() => {
+            update_context(index, context);
+            change_preview(index);
+          }}
         >
           تغيير
         </button>
