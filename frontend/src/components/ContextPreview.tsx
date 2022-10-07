@@ -29,7 +29,7 @@ const ContextPreview = ({
       >
         delete
       </button>
-      <button className="btn btn__edit" onClick={() => {change_preview(index); close_new();}}>
+      <button className="btn btn__edit" onClick={() => {change_preview(index); close_new(false);}}>
         edit
       </button>
     </div>

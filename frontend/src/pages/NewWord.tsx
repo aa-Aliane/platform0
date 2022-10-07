@@ -25,7 +25,7 @@ const NewWord = () => {
 
       <div className="contexts">
         <h2 className="title">السياقات</h2>
-        {!addContext && <button className="btn btn__new context__new" onClick={()=>change_context()}>إظافة سياق</button>}
+        {!addContext && <button className="btn btn__new context__new" onClick={()=>change_context(true)}>إظافة سياق</button>}
         {addContext && <Context />}
       </div>
     </div>

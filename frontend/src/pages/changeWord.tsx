@@ -100,7 +100,7 @@ const ChangeWord = () => {
         {!addContext && (
           <button
             className="btn btn__new context__new"
-            onClick={() => change_context()}
+            onClick={() => change_context(true)}
           >
             إظافة سياق
           </button>

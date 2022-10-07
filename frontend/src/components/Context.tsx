@@ -77,7 +77,7 @@ const Context = ({ word_id, index }: { word_id: number; index: number }) => {
       </div>
 
       <div className="control">
-        <button className="btn btn__delete" onClick={() => change_context()}>
+        <button className="btn btn__delete" onClick={() => change_context(false)}>
           إلغاء
         </button>
         <button

@@ -2,9 +2,9 @@ import create from "zustand";
 
 export const useNewContext = create((set) => ({
   newContext: false,
-  change_context: () =>
+  change_context: (val: boolean) =>
     set((state: any) => ({
-      newContext: state.newContext === false ? true : false,
+      newContext: val,
     })),
 }));
 
