@@ -9,6 +9,8 @@ import {
 } from "../hooks/contextState";
 import ContextPreview from "../components/ContextPreview";
 import OldContext from "../components/OldContext";
+import { api } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 const NewWord = () => {
   //   const [addContext, setAddContext] = useState(false);
@@ -19,6 +21,9 @@ const NewWord = () => {
   const delete_context = useContext((state:any) => state.delete_context)
   const previews = usePreviews((state: any) => state.previews);
   const add_preview = usePreviews((state: any) => state.add_preview);
+
+
+  const navigate = useNavigate()
 
   const [entry, setEntry] = useInput({
     word_ar: "",
@@ -86,6 +91,26 @@ const NewWord = () => {
             {previews[index] && <OldContext index={index} />}
           </>
         ))}
+      </div>
+      <div className="control">
+        <button className="btn btn__delete" onClick={() => navigate("/")}>
+          إلغاء
+        </button>
+        <button
+          className="btn btn__new"
+          onClick={() => {
+            api
+              .post("post_word/", {
+                word_ar: entry.word_ar,
+                word_en: entry.word_en,
+                word_fr: entry.word_fr,
+                contexts: contexts,
+              })
+              .then((res) => console.log(res.data));
+          }}
+        >
+          حفظ
+        </button>
       </div>
     </div>
   );
