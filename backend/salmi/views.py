@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from yaml import serialize
 from .models import Word, Context
 from .serializers import WordSerializer, ContextSerializer
 from rest_framework import viewsets, status, permissions
@@ -44,6 +45,32 @@ def post_context(request):
     
     
     return Response(status=status.HTTP_200_OK, data='context created successfuly')
+
+
+@api_view(['POST'])
+def update_word(request):
+    serializer = WordSerializer
+    word = Word.objects.get(id= request.data['word_id'])
+    word.word = request.data['word_ar']
+    word.word_en = request.data['word_en']
+    word.word_fr = request.data['word_fr']
+    
+    contexts = Context.objects.filter(word= request.data['word_id'])
+    for c in contexts:
+        c.delete()
+    
+    for c in request.data['contexts']:
+        context = Context.objects.create(
+            context = c['context'], 
+            keywords = c['keywords'],
+            ref = c['ref'],
+            word = word,
+        )
+        context.save()
+        
+    word.save()
+        
+    return Response(status=status.HTTP_200_OK, data='word updated successfuly')
     
 
     

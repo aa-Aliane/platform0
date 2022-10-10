@@ -6,8 +6,6 @@ import { api } from "../services/api";
 import { useNavigate } from "react-router";
 import { actions } from "../hooks/actions";
 
-
-
 export interface wordType {
   id: number;
   word: string;
@@ -79,7 +77,14 @@ const Words: React.FC = () => {
     }
     if (icon === "edit") {
       console.log("edit", id);
-      navigate("change_word", { state: { word: id } });
+      navigate("change_word", {
+        state: {
+          word: id,
+          word_ar: words[index].word,
+          word_fr: words[index].word_fr,
+          word_en: words[index].word_en,
+        },
+      });
     }
   };
 

@@ -31,7 +31,6 @@ export const useContext = create((set) => ({
   update_context: (index: number, context: ContextType) =>
     set((state: any) => ({
       contexts: state.contexts.map((c: ContextType, i: number) => {
-        console.log("cccccccccc", context)
         if (i === index) {
           return context;
         }

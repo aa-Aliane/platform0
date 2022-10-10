@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import Context from "../components/Context";
 import { useNewContext, usePreviews } from "../hooks/variablesState";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { actions } from "../hooks/actions";
 import {
@@ -13,6 +13,7 @@ import ContextPreview from "../components/ContextPreview";
 import { faHourglass2 } from "@fortawesome/free-solid-svg-icons";
 import { wordType } from "../components/Words";
 import OldContext from "../components/OldContext";
+import useInput from "../hooks/useInputs";
 
 const contextsReducer = (
   state: contextsStateType,
@@ -49,35 +50,44 @@ const ChangeWord = () => {
   //init context
   const init_contexts = useContext((state: any) => state.init_contexts);
   const contexts = useContext((state: any) => state.contexts);
+  const delete_context = useContext((state:any) => state.delete_context)
   const delete_word = useContext((state: any) => state.delete_word);
 
   //init_previews
   // const init_previews = usePreviews((state: any) => state.init_previews)
-  
-  const previews = usePreviews((state:any) => state.previews)
-  const add_preview = usePreviews((state: any) => state.add_preview)
+
+  const previews = usePreviews((state: any) => state.previews);
+  const add_preview = usePreviews((state: any) => state.add_preview);
 
   const [contextsState, contextsDispatch] = useReducer(contextsReducer, []);
 
+  const navigate = useNavigate();
+
+  const [entry, setEntry] = useInput({
+    word_ar: "",
+    word_fr: "",
+    word_en: "",
+  });
+
   useEffect(() => {
+    api.get('words/'+word)
+    .then((res) => {
+      setEntry(res.data.word, 'word_ar')
+      setEntry(res.data.word_en, 'word_en')
+      setEntry(res.data.word_fr, 'word_fr')
+    })
     api.post("get_context/", { word_id: word }).then((res) => {
       init_contexts(res.data);
-      // init_previews(res.data.map((x:any) => false))
-      res.data.map((x:any)=>add_preview(false))
+      res.data.map((x: any) => add_preview(false));
     });
   }, []);
 
   useEffect(() => {
-    console.log("ohh ", contexts)
+    console.log("ohh ", contexts);
   }, [contexts]);
 
   const HandleDelete = (index: number, id: number = 0) => {
-    contextsDispatch({
-      type: "DELETE",
-      payload: index,
-    });
-    api.delete('contexts/'+String(id))
-    .then(()=>console.log('deleted successfully'))
+    delete_context(index)
   };
 
   return (
@@ -85,12 +95,26 @@ const ChangeWord = () => {
       <div className="word--container">
         <h2 className="title">المصطلح</h2>
         <div className="new--word">
-          <input type="text" className="word" placeholder="المصطلح بلعربية" />
-          <input type="text" className="word" placeholder="المصطلح بلفرنسية" />
+          <input
+            type="text"
+            className="word"
+            placeholder="المصطلح بلعربية"
+            value={entry.word_ar}
+            onChange={(e) => setEntry(e.target.value, "word_ar")}
+          />
+          <input
+            type="text"
+            className="word"
+            placeholder="المصطلح بلفرنسية"
+            value={entry.word_fr}
+            onChange={(e) => setEntry(e.target.value, 'word_fr')}
+          />
           <input
             type="text"
             className="word"
             placeholder="االمصطلح بلانجليزية"
+            value={entry.word_en}
+            onChange={(e) => setEntry(e.target.value, "word_en")}
           />
         </div>
       </div>
@@ -105,15 +129,42 @@ const ChangeWord = () => {
             إظافة سياق
           </button>
         )}
-        {addContext && <Context word_id={-1} index={-1} />}
+        {addContext && <Context />}
         {String(addContext)}
       </div>
       {contexts.map((c: any, index: number) => (
         <>
-        {!previews[index] && <ContextPreview context={c} index={index} HandleDelete={HandleDelete} />}
-        {previews[index] && <OldContext word_id={word.id} index={index} />}
+          {!previews[index] && (
+            <ContextPreview
+              context={c}
+              index={index}
+              HandleDelete={HandleDelete}
+            />
+          )}
+          {previews[index] && <OldContext word_id={word.id} index={index} />}
         </>
       ))}
+
+      <div className="control">
+        <button className="btn btn__delete" onClick={() => navigate("/")}>
+          إلغاء
+        </button>
+        <button
+          className="btn btn__new"
+          onClick={() => {
+            api.post('update_word/', {
+              word_ar : entry.word_ar,
+              word_en : entry.word_en,
+              word_fr : entry.word_fr,
+              contexts : contexts,
+              word_id: word
+            })
+            .then((res) => console.log(res.data))
+          }}
+        >
+          حفظ
+        </button>
+      </div>
     </div>
   );
 };

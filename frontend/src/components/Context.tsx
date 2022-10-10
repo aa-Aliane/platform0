@@ -6,7 +6,7 @@ import { useNewContext, usePreviews } from "../hooks/variablesState";
 import { useContext } from "../hooks/contextState";
 import useInput from "../hooks/useInputs";
 
-const Context = ({ word_id, index }: { word_id: number; index: number }) => {
+const Context = () => {
   const [keyword, setKeyword] = useState<String>("");
   const [keywords, setKeywords] = useState<String[]>([]);
   const change_context = useNewContext((state: any) => state.change_context);

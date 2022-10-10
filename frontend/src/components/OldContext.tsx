@@ -6,7 +6,7 @@ import { useContext } from "../hooks/contextState";
 import { api } from "../services/api";
 import useInput from "../hooks/useInputs";
 
-const OldContext = ({ word_id, index }: { word_id: number; index: number }) => {
+const OldContext = ({ index }: { index: number }) => {
   const [keyword, setKeyword] = useState<String>("");
   const [keywords, setKeywords] = useState<String[]>([]);
 
