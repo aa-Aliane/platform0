@@ -59,7 +59,12 @@ const Context = () => {
           {keywords.map((k: any, i: number) => (
             <div className="keyword">
               <p className="keyword__item">{k}</p>
-              <span className="keyword__delete">
+              <span
+                className="keyword__delete"
+                onClick={() => {
+                  setKeywords(keywords.filter((x, j) => i !== j));
+                }}
+              >
                 <FontAwesomeIcon icon={faXmark} />
               </span>
             </div>
@@ -77,10 +82,10 @@ const Context = () => {
       </div>
 
       <div className="control">
-        <button className="btn btn__delete" onClick={() => change_context(false)}>
+        <div className="btn btn__delete" onClick={() => change_context(false)}>
           إلغاء
-        </button>
-        <button
+        </div>
+        <div
           className="btn btn__edit"
           onClick={() => {
             const c = {
@@ -96,7 +101,7 @@ const Context = () => {
           }}
         >
           إضافة
-        </button>
+        </div>
       </div>
     </div>
   );

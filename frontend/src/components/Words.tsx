@@ -51,6 +51,9 @@ const Words: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const [step, setStep] = useState(1)
+  const [name, setName] = useState("")
+
   useEffect(() => {
     api.get("words").then((res: any) => {
       init_words(res.data.map((w: any) => ({ ...w, is_deleted: "false" })));

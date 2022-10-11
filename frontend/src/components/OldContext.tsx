@@ -14,7 +14,6 @@ const OldContext = ({ index }: { index: number }) => {
   const update_context = useContext((state: any) => state.update_context);
   const old_context = useContext((state: any) => state.contexts[index]);
 
-
   const [context, setContext] = useInput({
     context: old_context.context,
     keywords: old_context.keywords,
@@ -57,9 +56,14 @@ const OldContext = ({ index }: { index: number }) => {
             }}
           />
           {keywords.map((k: any, i: number) => (
-            <div className="keyword">
-              <p className="keyword__item">{k}</p>
-              <span className="keyword__delete">
+            <div className="keyword" key={'kw'+i}>
+              <div className="keyword__item">{k}</div>
+              <span
+                className="keyword__delete"
+                onClick={() => {
+                  setKeywords(keywords.filter((x, j) => i !== j));
+                }}
+              >
                 <FontAwesomeIcon icon={faXmark} />
               </span>
             </div>
@@ -77,13 +81,10 @@ const OldContext = ({ index }: { index: number }) => {
       </div>
 
       <div className="control">
-        <button
-          className="btn btn__delete"
-          onClick={() => change_preview(index)}
-        >
+        <div className="btn btn__delete" onClick={() => change_preview(index)}>
           إلغاء
-        </button>
-        <button
+        </div>
+        <div
           className="btn btn__edit"
           onClick={() => {
             update_context(index, context);
@@ -91,7 +92,7 @@ const OldContext = ({ index }: { index: number }) => {
           }}
         >
           تغيير
-        </button>
+        </div>
       </div>
     </div>
   );

@@ -18,12 +18,11 @@ const NewWord = () => {
   const change_context = useNewContext((state: any) => state.change_context);
   const contexts = useContext((state: any) => state.contexts);
   const init_contexts = useContext((state: any) => state.init_contexts);
-  const delete_context = useContext((state:any) => state.delete_context)
+  const delete_context = useContext((state: any) => state.delete_context);
   const previews = usePreviews((state: any) => state.previews);
   const add_preview = usePreviews((state: any) => state.add_preview);
 
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [entry, setEntry] = useInput({
     word_ar: "",
@@ -31,13 +30,15 @@ const NewWord = () => {
     word_en: "",
   });
 
+  const [step, setStep] = useState(1);
+
   const HandleDelete = (index: number, id: number = 0) => {
     delete_context(index);
   };
 
-  useEffect(()=> {
-    init_contexts([])
-  },[])
+  useEffect(() => {
+    init_contexts([]);
+  }, []);
 
   return (
     <div className="main--container">
@@ -71,12 +72,12 @@ const NewWord = () => {
       <div className="contexts">
         <h2 className="title">السياقات</h2>
         {!addContext && (
-          <button
+          <div
             className="btn btn__new context__new"
             onClick={() => change_context(true)}
           >
             إظافة سياق
-          </button>
+          </div>
         )}
         {addContext && <Context />}
         {contexts.map((c: any, index: number) => (
@@ -93,24 +94,33 @@ const NewWord = () => {
         ))}
       </div>
       <div className="control">
-        <button className="btn btn__delete" onClick={() => navigate("/")}>
+        <div className="btn btn__delete" onClick={() => navigate("/")}>
           إلغاء
-        </button>
-        <button
+        </div>
+        <div
           className="btn btn__new"
           onClick={() => {
-            api
-              .post("post_word/", {
-                word_ar: entry.word_ar,
-                word_en: entry.word_en,
-                word_fr: entry.word_fr,
-                contexts: contexts,
-              })
-              .then((res) => console.log(res.data));
+            if (step === 3) {
+              api
+                .post("post_word/", {
+                  word_ar: entry.word_ar,
+                  word_en: entry.word_en,
+                  word_fr: entry.word_fr,
+                  contexts: contexts,
+                })
+                .then((res) => {
+                  setStep(1);
+                  navigate("/");
+                });
+            } else {
+              setStep(step + 1);
+            }
           }}
         >
-          حفظ
-        </button>
+          {step === 1 && "حفظ"}
+          {step === 2 && "تاأكيد(1/2)"}
+          {step === 3 && "تاأكيد(2/2)"}
+        </div>
       </div>
     </div>
   );

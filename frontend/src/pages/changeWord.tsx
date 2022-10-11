@@ -50,7 +50,7 @@ const ChangeWord = () => {
   //init context
   const init_contexts = useContext((state: any) => state.init_contexts);
   const contexts = useContext((state: any) => state.contexts);
-  const delete_context = useContext((state:any) => state.delete_context)
+  const delete_context = useContext((state: any) => state.delete_context);
   const delete_word = useContext((state: any) => state.delete_word);
 
   //init_previews
@@ -69,13 +69,14 @@ const ChangeWord = () => {
     word_en: "",
   });
 
+  const [step, setStep] = useState(1);
+
   useEffect(() => {
-    api.get('words/'+word)
-    .then((res) => {
-      setEntry(res.data.word, 'word_ar')
-      setEntry(res.data.word_en, 'word_en')
-      setEntry(res.data.word_fr, 'word_fr')
-    })
+    api.get("words/" + word).then((res) => {
+      setEntry(res.data.word, "word_ar");
+      setEntry(res.data.word_en, "word_en");
+      setEntry(res.data.word_fr, "word_fr");
+    });
     api.post("get_context/", { word_id: word }).then((res) => {
       init_contexts(res.data);
       res.data.map((x: any) => add_preview(false));
@@ -87,7 +88,7 @@ const ChangeWord = () => {
   }, [contexts]);
 
   const HandleDelete = (index: number, id: number = 0) => {
-    delete_context(index)
+    delete_context(index);
   };
 
   return (
@@ -107,7 +108,7 @@ const ChangeWord = () => {
             className="word"
             placeholder="المصطلح بلفرنسية"
             value={entry.word_fr}
-            onChange={(e) => setEntry(e.target.value, 'word_fr')}
+            onChange={(e) => setEntry(e.target.value, "word_fr")}
           />
           <input
             type="text"
@@ -122,12 +123,12 @@ const ChangeWord = () => {
       <div className="contexts">
         <h2 className="title">السياقات</h2>
         {!addContext && (
-          <button
+          <div
             className="btn btn__new context__new"
             onClick={() => change_context(true)}
           >
             إظافة سياق
-          </button>
+          </div>
         )}
         {addContext && <Context />}
         {String(addContext)}
@@ -146,24 +147,34 @@ const ChangeWord = () => {
       ))}
 
       <div className="control">
-        <button className="btn btn__delete" onClick={() => navigate("/")}>
+        <div className="btn btn__delete" onClick={() => navigate("/")}>
           إلغاء
-        </button>
-        <button
+        </div>
+        <div
           className="btn btn__new"
           onClick={() => {
-            api.post('update_word/', {
-              word_ar : entry.word_ar,
-              word_en : entry.word_en,
-              word_fr : entry.word_fr,
-              contexts : contexts,
-              word_id: word
-            })
-            .then((res) => console.log(res.data))
+            if (step === 3) {
+              api
+                .post("update_word/", {
+                  word_ar: entry.word_ar,
+                  word_en: entry.word_en,
+                  word_fr: entry.word_fr,
+                  contexts: contexts,
+                  word_id: word,
+                })
+                .then((res) => {
+                  setStep(1);
+                  navigate("/");
+                });
+            } else {
+              setStep(step + 1);
+            }
           }}
         >
-          حفظ
-        </button>
+          {step === 1 && "حفظ"}
+          {step === 2 && "تاأكيد(1/2)"}
+          {step === 3 && "تاأكيد(2/2)"}
+        </div>
       </div>
     </div>
   );
