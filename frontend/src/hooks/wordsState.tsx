@@ -15,6 +15,14 @@ export interface wordsActionType {
 export const useWords = create((set) => ({
   words: [],
   init_words: (words: wordType[]) => set((state:any) => ({words: words})),
+  confirm_delete : (index: number) => set((state:any) =>({words: state.words.map((w:wordType, i:number) =>{
+    if (i===index){
+      const ret = w;
+      w.step += 1;
+      return ret
+    }
+    return w;
+  })})),
   delete_word: (index: number) =>
     set((state: any) => ({
       words: state.words.filter((w: string, i: number) => i !== index),

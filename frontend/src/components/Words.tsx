@@ -12,6 +12,8 @@ export interface wordType {
   created_at: string;
   definition: string;
   is_deleted: string;
+  step: number;
+  name: string;
 }
 
 type wordsStateType = wordType[];
@@ -21,62 +23,42 @@ interface wordsActionType {
   payload: any;
 }
 
-const wordsReducer = (state: wordsStateType, action: wordsActionType) => {
-  switch (action.type) {
-    case actions.PRE_DELETE:
-      return state.map((w: any, i: number) => {
-        if (i === action.payload) {
-          return { ...w, is_deleted: "true" };
-        }
-        return w;
-      });
-
-    case actions.DELETE:
-      return state.filter((w: any, i: number) => i !== action.payload);
-
-    case actions.RELOAD:
-      return action.payload;
-
-    default:
-      return state;
-  }
-};
-
 const Words: React.FC = () => {
   const init_words = useWords((state: any) => state.init_words);
   const words = useWords((state: any) => state.words);
+  const confirm_delete = useWords((state: any) => state.confirm_delete);
   const delete_word = useWords((state: any) => state.delete_word);
-
-  const [wordsState, wordsDispatch] = useReducer(wordsReducer, []);
 
   const navigate = useNavigate();
 
-  const [step, setStep] = useState(1)
-  const [name, setName] = useState("")
-
   useEffect(() => {
     api.get("words").then((res: any) => {
-      init_words(res.data.map((w: any) => ({ ...w, is_deleted: "false" })));
+      init_words(
+        res.data.map((w: any) => ({
+          ...w,
+          is_deleted: "false",
+          step: 0,
+          name: "حذف",
+        }))
+      );
     });
   }, []);
 
-  useEffect(() => {
-    console.log(words);
-    wordsDispatch({
-      type: "RELOAD",
-      payload: words,
-    });
-  }, [words]);
-
   const HandleClick = (icon: string, index: number, id: number) => {
     if (icon === "delete") {
-      delete_word(index);
-      wordsDispatch({
-        type: "DELETE",
-        payload: index,
-      });
-      console.log(index);
-      api.delete("words/" + String(id));
+      if (words[index].step === 2) {
+        delete_word(index);
+        api.delete("words/" + String(id));
+        words[index].step = 1;
+        words[index].name = "حذف";
+      } else {
+        confirm_delete(index);
+        if (words[index].step === 1) {
+          words[index].name = "تاأكيد(1/2)";
+        } else {
+          words[index].name = "تاأكيد(2/2)";
+        }
+      }
     }
     if (icon === "edit") {
       console.log("edit", id);
@@ -94,8 +76,17 @@ const Words: React.FC = () => {
   return (
     <div className="words">
       <>
-        {wordsState.map((w: any, i: number) => (
-          <div className="word" state-hidden={wordsState[i].is_deleted} key={i}>
+        {words.map((w: wordType, i: number) => (
+          <div className="word" state-hidden={words[i].is_deleted} key={i}>
+            <p>{w.word}</p>
+
+            <Button
+              name={w.name}
+              icon={"delete"}
+              HandleClick={HandleClick}
+              id={w.id}
+              index={i}
+            />
             <Button
               name={"مراجعة"}
               icon={"edit"}
@@ -103,14 +94,6 @@ const Words: React.FC = () => {
               id={w.id}
               index={i}
             />
-            <Button
-              name={"حذف"}
-              icon={"delete"}
-              HandleClick={HandleClick}
-              id={w.id}
-              index={i}
-            />
-            <p>{w.word}</p>
           </div>
         ))}
       </>
