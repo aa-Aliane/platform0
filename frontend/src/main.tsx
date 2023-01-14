@@ -9,7 +9,7 @@ import ChangeWord from "./pages/changeWord";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: <App />,
   },
   {
     path: "/new",

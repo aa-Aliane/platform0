@@ -14,7 +14,7 @@ const ContextPreview = ({
   HandleDelete: HandleDeleteType;
 }) => {
   const change_preview = usePreviews((state: any) => state.change_preview);
-  const context = useContext((state: any) => state.contexts[index])
+  const context = useContext((state: any) => state.contexts[index]);
 
   const delete_context = useContext((state: any) => state.delete_context);
 
@@ -23,14 +23,17 @@ const ContextPreview = ({
   return (
     <div className="line--container">
       <div className="context__content">{context.context}</div>
-      <button
-        className="btn btn__delete"
-        onClick={() => delete_context(index)}
-      >
-        delete
+      <button className="btn btn__delete" onClick={() => delete_context(index)}>
+        حذف
       </button>
-      <button className="btn btn__edit" onClick={() => {change_preview(index); close_new(false);}}>
-        edit
+      <button
+        className="btn btn__edit"
+        onClick={() => {
+          change_preview(index);
+          close_new(false);
+        }}
+      >
+        مراجعة
       </button>
     </div>
   );

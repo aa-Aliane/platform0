@@ -131,7 +131,6 @@ const ChangeWord = () => {
           </div>
         )}
         {addContext && <Context />}
-        {String(addContext)}
       </div>
       {contexts.map((c: any, index: number) => (
         <>

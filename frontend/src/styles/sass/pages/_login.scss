@@ -1,0 +1,21 @@
+.login {
+    width : 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin : 0 auto;
+    margin-top: 25vh;
+    padding : 2rem;
+    box-shadow: 0 0 1rem .5rem var(--clr-neutral-400);
+    border-radius: var(--default-radius);
+    
+
+    & input {
+        width : 80%;
+    }
+
+    &__submit {
+        width : 50%;
+    }
+}
