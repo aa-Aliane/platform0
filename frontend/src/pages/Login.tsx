@@ -33,6 +33,9 @@ const Login = () => {
             .then((res) => {
               localStorage.setItem("access", res.data.access);
               localStorage.setItem("refresh", res.data.access);
+              api.defaults.headers.common[
+                "Authorization"
+              ] = `JWT ${res.data.access}`;
             });
         }}
       >
