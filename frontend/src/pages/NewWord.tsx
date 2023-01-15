@@ -10,7 +10,8 @@ import {
 import ContextPreview from "../components/ContextPreview";
 import OldContext from "../components/OldContext";
 import { api } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useWords } from "../hooks/wordsState";
 
 const NewWord = () => {
   //   const [addContext, setAddContext] = useState(false);
@@ -24,6 +25,17 @@ const NewWord = () => {
 
   const navigate = useNavigate();
 
+  const postFailedWord = (word: any) => {
+    const refresh = localStorage.getItem("refresh");
+    api.post("token/refresh/", { refresh: refresh }).then((res) => {
+      localStorage.setItem("access", res.data.access);
+      api.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${res.data.access}`;
+    });
+    api.post("post_word/", word).then(() => navigate("/"));
+  };
+
   const [entry, setEntry] = useInput({
     word_ar: "",
     word_fr: "",
@@ -31,6 +43,7 @@ const NewWord = () => {
   });
 
   const [step, setStep] = useState(1);
+  const [wordError, setWordError] = useState("false");
 
   const HandleDelete = (index: number, id: number = 0) => {
     delete_context(index);
@@ -51,6 +64,8 @@ const NewWord = () => {
             placeholder="المصطلح بلعربية"
             value={entry.word_ar}
             onChange={(e) => setEntry(e.target.value, "word_ar")}
+            data-error={wordError}
+            onClick={() => setWordError("false")}
           />
           <input
             type="text"
@@ -111,9 +126,18 @@ const NewWord = () => {
                 .then((res) => {
                   setStep(1);
                   navigate("/");
+                })
+                .catch((err) => {
+                  postFailedWord({
+                    word_ar: entry.word_ar,
+                    word_en: entry.word_en,
+                    word_fr: entry.word_fr,
+                    contexts: contexts,
+                  });
                 });
             } else {
-              setStep(step + 1);
+              if (entry.word_ar) setStep(step + 1);
+              else setWordError("true");
             }
           }}
         >

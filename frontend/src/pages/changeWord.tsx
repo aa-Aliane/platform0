@@ -63,6 +63,17 @@ const ChangeWord = () => {
 
   const navigate = useNavigate();
 
+  const postFailedWordUp = (word: any) => {
+    const refresh = localStorage.getItem("refresh");
+    api.post("token/refresh/", { refresh: refresh }).then((res) => {
+      localStorage.setItem("access", res.data.access);
+      api.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${res.data.access}`;
+    });
+    api.post("update_word/", word).then(() => navigate("/"));
+  };
+
   const [entry, setEntry] = useInput({
     word_ar: "",
     word_fr: "",
@@ -164,6 +175,15 @@ const ChangeWord = () => {
                 .then((res) => {
                   setStep(1);
                   navigate("/");
+                })
+                .catch((err) => {
+                  postFailedWordUp({
+                    word_ar: entry.word_ar,
+                    word_en: entry.word_en,
+                    word_fr: entry.word_fr,
+                    contexts: contexts,
+                    word_id: word,
+                  });
                 });
             } else {
               setStep(step + 1);

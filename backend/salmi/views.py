@@ -24,12 +24,12 @@ class ContextViewSet(viewsets.ModelViewSet):
 
 @api_view(["GET"])
 @permission_classes([permissions.IsAuthenticated])
-@authentication_classes([authentication.JWTAuthentication])
 def login(request):
     return Response(status=status.HTTP_200_OK, data="logged")
 
 
 @api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
 def get_context(request):
     word = Word.objects.get(id=request.data["word_id"])
     context = Context.objects.filter(word=request.data["word_id"])
@@ -39,6 +39,7 @@ def get_context(request):
 
 
 @api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
 def post_context(request):
     serializer = ContextSerializer
     word = Word.objects.get(id=request.data["word_id"])
@@ -54,6 +55,7 @@ def post_context(request):
 
 
 @api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
 def update_word(request):
     serializer = WordSerializer
     word = Word.objects.get(id=request.data["word_id"])
@@ -80,6 +82,7 @@ def update_word(request):
 
 
 @api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
 def post_word(request):
     serializer = WordSerializer
     word = Word.objects.create(

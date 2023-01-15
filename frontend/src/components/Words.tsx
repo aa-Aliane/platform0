@@ -12,6 +12,7 @@ export interface wordType {
   created_at: string;
   definition: string;
   is_deleted: string;
+  is_selected: false;
   step: number;
   name: string;
 }
@@ -26,10 +27,17 @@ interface wordsActionType {
 const Words: React.FC = () => {
   const init_words = useWords((state: any) => state.init_words);
   const words = useWords((state: any) => state.words);
+  const filter = useWords((state: any) => state.filter);
   const confirm_delete = useWords((state: any) => state.confirm_delete);
   const delete_word = useWords((state: any) => state.delete_word);
+  const select_word = useWords((state: any) => state.select_word);
 
   const navigate = useNavigate();
+
+  const filterWords = (ws: wordType[]) => {
+    if (!filter) return ws;
+    return ws.filter((w: wordType) => w.word.includes(filter));
+  };
 
   useEffect(() => {
     api.get("words").then((res: any) => {
@@ -44,11 +52,22 @@ const Words: React.FC = () => {
     });
   }, []);
 
+  const postFailedWordDel = (id: any) => {
+    const refresh = localStorage.getItem("refresh");
+    api.post("token/refresh/", { refresh: refresh }).then((res) => {
+      localStorage.setItem("access", res.data.access);
+      api.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${res.data.access}`;
+    });
+    api.delete("words/" + String(id));
+  };
+
   const HandleClick = (icon: string, index: number, id: number) => {
     if (icon === "delete") {
       if (words[index].step === 2) {
         delete_word(index);
-        api.delete("words/" + String(id));
+        api.delete("words/" + String(id)).catch((err) => postFailedWordDel(id));
         words[index].step = 1;
         words[index].name = "حذف";
       } else {
@@ -76,9 +95,10 @@ const Words: React.FC = () => {
   return (
     <div className="words">
       <>
-        {words.map((w: wordType, i: number) => (
+        {filter}
+        {filterWords(words).map((w: wordType, i: number) => (
           <div className="word" state-hidden={words[i].is_deleted} key={i}>
-            <p>{w.word}</p>
+            <div className="word__content">{w.word}</div>
 
             <Button
               name={w.name}
@@ -94,6 +114,11 @@ const Words: React.FC = () => {
               id={w.id}
               index={i}
             />
+            <span
+              className="word--selector"
+              data-selected={w.is_selected}
+              onClick={() => select_word(i, !w.is_selected)}
+            ></span>
           </div>
         ))}
       </>

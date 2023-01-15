@@ -7,6 +7,7 @@ import { useContext } from "../hooks/contextState";
 import useInput from "../hooks/useInputs";
 
 const Context = () => {
+  const [contextError, setContextError] = useState<String>("false");
   const [keyword, setKeyword] = useState<String>("");
   const [keywords, setKeywords] = useState<String[]>([]);
   const change_context = useNewContext((state: any) => state.change_context);
@@ -31,9 +32,12 @@ const Context = () => {
       <div className="context">
         <h2 className="title">السياق</h2>
         <textarea
-          name="context__content"
+          className="context__content"
           value={context.context}
+          data-error={contextError}
           onChange={(e) => setContext(e.target.value, "context")}
+          onClick={() => setContextError("false")}
+          placeholder={context.context==="" ? "يرجى كتابة السياق" : ""}
         ></textarea>
       </div>
 
@@ -88,16 +92,20 @@ const Context = () => {
         <div
           className="btn btn__edit"
           onClick={() => {
-            const c = {
-              id: -1,
-              word_id: -1,
-              context: context.context,
-              ref: context.ref,
-              keywords: keywords.join(" "),
-            };
-            add_context(c);
-            add_preview(false);
-            console.log(previews);
+            if (context.context) {
+              const c = {
+                id: -1,
+                word_id: -1,
+                context: context.context,
+                ref: context.ref,
+                keywords: keywords.join(" "),
+              };
+              add_context(c);
+              add_preview(false);
+              console.log(previews);
+            } else {
+              setContextError("true");
+            }
           }}
         >
           إضافة

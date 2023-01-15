@@ -10,6 +10,7 @@
   --clr-neutral-200: hsl(0deg, 0%, 91%);
   --clr-neutral-300: hsl(0deg, 0%, 85%);
   --clr-neutral-400: hsl(0deg, 0%, 70%);
+  --clr-neutral-600: hsl(0deg, 0%, 40%);
   --fs-s: 0.8rem;
   --fs-m: 1rem;
   --fs-l: 1.2rem;
@@ -132,6 +133,27 @@ body {
   padding: 0.5rem 2rem;
   border-radius: var(--default-radius);
 }
+.word__content {
+  width: 30%;
+}
+.word--selector {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.3rem;
+  background-color: var(--clr-neutral-400);
+  cursor: pointer;
+}
+.word--selector:hover {
+  background-color: var(--clr-neutral-300);
+  border: 0.2rem solid var(--clr-primary-400);
+}
+.word--selector:focus, .word--selector:active {
+  background-color: var(--clr-primary-400);
+  border: 0.2rem solid var(--clr-neutral-600);
+}
+.word--selector[data-selected=true] {
+  background-color: var(--clr-primary-400);
+}
 
 .word[deleted_state=true] {
   overflow: hidden;
@@ -145,6 +167,11 @@ body {
   padding: 2rem;
 }
 
+@media (max-width: 1600px) {
+  .main--container {
+    width: 80%;
+  }
+}
 .word--container {
   display: flex;
   flex-direction: column;
@@ -153,6 +180,10 @@ body {
 .new--word {
   display: flex;
   gap: 2rem;
+}
+.new--word input[data-error=true] {
+  background-color: var(--clr-primary-410);
+  color: var(--clr-neutral-100);
 }
 
 .context--container {
@@ -177,6 +208,10 @@ body {
   width: 80%;
   margin-left: auto;
   margin-right: auto;
+}
+.context__content[data-error=true] {
+  background-color: var(--clr-primary-410);
+  color: var(--clr-neutral-100);
 }
 
 .keywords--container {
