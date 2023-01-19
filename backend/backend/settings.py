@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure--(5ivu^5egs*p-69g&5^wn&*0k4$d_b&&mn2p51rqcc2!j68y1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["drdhn-dl.cersit.dz"]
 
 
 # Application definition
@@ -64,18 +64,11 @@ REST_FRAMEWORK = {
 }
 
 
-CRCF_TRUSTED_ORIGINS = [
-    "localhost:5173",
-]
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "www.drdhn-dl.cerist.dz",
 ]
 
 ROOT_URLCONF = "backend.urls"
