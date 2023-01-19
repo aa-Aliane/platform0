@@ -1,0 +1,28 @@
+
+#!/bin/bash
+
+NAME="arabic_dictionnary"
+DJANGODIR=/home/alian/platform0/
+SOCKFILE=/home/alian/platform0/run/gunicorn.sock
+NUM_WORKERS=3
+DJANGO_SETTINGS_MODULE=backend.settings
+DJANGO_WSGI_MODULE=backend.wsgi
+
+echo "starting"
+
+cd $DJANGODIR
+conda activate nlpchallenge
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+RUNDIR=$(dirname $SOCKFILE)
+test -d RUNDIR || mkdir -p $RUNDIR
+
+exec gunicorn ${DJANGO_WSGI_MODULE}:application \
+        --name $NAME \
+        --workers $NUM_WORKERS \
+        --bind=unix:$SOCKFILE \
+        --log-level=debug \
+        --timeout=120 \
+        --graceful-timeout=120 \
+        --log-file="/home/alian/error_log_platform0"
