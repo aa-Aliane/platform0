@@ -104,3 +104,19 @@ def post_word(request):
         context.save()
 
     return Response(status=status.HTTP_200_OK, data="word added successfuly")
+
+
+# import pandas as pd
+# from tqdm import tqdm
+
+# mo3jam = pd.read_csv("mo3jam.tsv", sep="\t")
+# mo3jam.columns = ["en", "fr", "ar"]
+
+# for _, line in mo3jam.iterrows():
+#     w = Word.objects.create(
+#         word=line["ar"],
+#         word_fr=line["fr"],
+#         word_en=line["en"],
+#         created_at=0,
+#     )
+#     w.save()
