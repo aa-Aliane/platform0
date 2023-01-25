@@ -111,6 +111,13 @@ body {
   padding: 10rem 0;
 }
 
+.logout {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5em 0em;
+}
+
 .line--container {
   margin-top: 1rem;
   display: flex;
@@ -166,10 +173,21 @@ body {
   justify-content: space-between;
   padding: 2rem;
 }
+@media (max-width: 600px) {
+  .menu {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
 
 @media (max-width: 1600px) {
   .main--container {
     width: 80%;
+  }
+}
+@media (max-width: 500px) {
+  .main--container {
+    width: 90%;
   }
 }
 .word--container {
@@ -184,6 +202,15 @@ body {
 .new--word input[data-error=true] {
   background-color: var(--clr-primary-410);
   color: var(--clr-neutral-100);
+}
+@media (max-width: 750px) {
+  .new--word {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .new--word .word {
+    text-align: center;
+  }
 }
 
 .context--container {
@@ -261,6 +288,12 @@ body {
   align-items: flex-start;
   justify-content: center;
 }
+@media (max-width: 900px) {
+  .ref--container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
 
 .control {
   display: flex;
@@ -287,6 +320,52 @@ body {
 }
 .login__submit {
   width: 50%;
+}
+@media (max-width: 1200px) {
+  .login {
+    width: 60%;
+  }
+  .login input {
+    width: 90%;
+  }
+  .login__submit {
+    width: 60%;
+  }
+}
+@media (max-width: 1000px) {
+  .login {
+    width: 70%;
+  }
+  .login input {
+    width: 95%;
+  }
+  .login__submit {
+    width: 70%;
+  }
+}
+@media (max-width: 700px) {
+  .login {
+    width: 80%;
+  }
+  .login input {
+    width: 97%;
+  }
+  .login__submit {
+    width: 80%;
+  }
+}
+@media (max-width: 300px) {
+  .login {
+    width: 100%;
+    padding: 3rem 0;
+    border-radius: 0;
+  }
+  .login input {
+    width: 100%;
+  }
+  .login__submit {
+    width: 95%;
+  }
 }
 
 .btn {

@@ -3,7 +3,6 @@ import Login from "./pages/Login";
 import Main from "./pages/Main";
 import { api } from "./services/api";
 import { useCredentials } from "./hooks/credentials";
-import { faHourglass2 } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
   const isLogged = useCredentials((state: any) => state.isLogged);
