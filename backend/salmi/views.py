@@ -10,6 +10,7 @@ from rest_framework.decorators import (
 )
 
 
+
 class WordViewSet(viewsets.ModelViewSet):
     queryset = Word.objects.all()
     serializer_class = WordSerializer

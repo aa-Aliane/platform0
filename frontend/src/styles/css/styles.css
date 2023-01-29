@@ -406,6 +406,22 @@ body {
 .btn__new:focus, .btn__new:active {
   background-color: var(--clr-neutral-400);
 }
+@media (max-width: 700px) {
+  .btn {
+    padding: 0.2em 0.4em;
+  }
+  .btn__text {
+    display: none;
+  }
+}
+@media (min-width: 600px) and (max-width: 800px) {
+  .btn {
+    padding: 0.5em 2em;
+  }
+  .btn__text--2 {
+    display: none;
+  }
+}
 
 textarea, input {
   border: none;

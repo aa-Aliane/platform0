@@ -2,6 +2,8 @@ import React from "react";
 import Button from "./Button";
 import { useNavigate } from "react-router";
 import { useWords } from "../hooks/wordsState";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const Nav = () => {
   const navigate = useNavigate();
@@ -14,6 +16,9 @@ const Nav = () => {
   const HandleClick = (icon: string, index: number, id: number) => {
     navigate("new");
   };
+
+
+
 
   return (
     <div className="menu">
@@ -33,7 +38,10 @@ const Nav = () => {
             else confirm_d_selected();
           }}
         >
-          حذف الكلمات المختارة
+          <span className="btn__icon">
+            <FontAwesomeIcon icon={faTrash} />
+          </span>
+          <p className="btn__text--2">حذف الكلمات</p>
           {d_selected_step !== 0 && `(${d_selected_step}/2)`}
         </div>
       )}
