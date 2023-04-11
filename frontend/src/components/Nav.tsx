@@ -3,7 +3,12 @@ import Button from "./Button";
 import { useNavigate } from "react-router";
 import { useWords } from "../hooks/wordsState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSignOut,
+  faTrash,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
+import { api } from "../services/api";
 
 const Nav = () => {
   const navigate = useNavigate();
@@ -17,17 +22,30 @@ const Nav = () => {
     navigate("new");
   };
 
-
-
-
   return (
     <div className="menu">
       {n_words !== 0 && (
-        <input
-          type="text"
-          placeholder="بحث"
-          onChange={(e) => setFilter(e.target.value)}
-        />
+        <>
+          <input
+            type="text"
+            placeholder="بحث"
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {/* download the dictionary */}
+          <div
+            className="btn btn__new fs-m"
+            onClick={() => {
+              api.get("download/").then((res: any) => {
+                console.log(res.data);
+              });
+            }}
+          >
+            <p>تحميل</p>
+            <span className="btn__icon">
+              <FontAwesomeIcon icon={faDownload} />
+            </span>
+          </div>
+        </>
       )}
       {n_words === 0 && <h3>لا توجد أي كلمة في القاموس</h3>}
       {n_selected !== 0 && (

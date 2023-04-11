@@ -1,16 +1,16 @@
 :root {
-  --clr-primary-300: hsl(227deg, 67%, 52%);
-  --clr-primary-310: hsl(227deg, 67%, 62%);
-  --clr-primary-350: hsl(227deg, 67%, 40%);
-  --clr-primary-400: hsl(0deg, 67%, 52%);
-  --clr-primary-410: hsl(0deg, 67%, 62%);
-  --clr-primary-450: hsl(0deg, 67%, 40%);
-  --clr-primary-900: hsl(0deg, 0%, 0%);
+  --clr-primary-300: hsl(227, 67%, 52%);
+  --clr-primary-310: hsl(227, 67%, 62%);
+  --clr-primary-350: hsl(227, 67%, 40%);
+  --clr-primary-400: hsl(0, 67%, 52%);
+  --clr-primary-410: hsl(0, 67%, 62%);
+  --clr-primary-450: hsl(0, 67%, 40%);
+  --clr-primary-900: hsl(0, 0%, 0%);
   --clr-neutral-100: white;
-  --clr-neutral-200: hsl(0deg, 0%, 91%);
-  --clr-neutral-300: hsl(0deg, 0%, 85%);
-  --clr-neutral-400: hsl(0deg, 0%, 70%);
-  --clr-neutral-600: hsl(0deg, 0%, 40%);
+  --clr-neutral-200: hsl(0, 0%, 91%);
+  --clr-neutral-300: hsl(0, 0%, 85%);
+  --clr-neutral-400: hsl(0, 0%, 70%);
+  --clr-neutral-600: hsl(0, 0%, 40%);
   --fs-s: 0.8rem;
   --fs-m: 1rem;
   --fs-l: 1.2rem;
@@ -88,8 +88,8 @@ select {
     scroll-behavior: auto;
   }
   *,
-*::before,
-*::after {
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -114,7 +114,14 @@ body {
 .logout {
   position: fixed;
   top: 1rem;
-  right: 1rem;
+  right: 2rem;
+  padding: 0.5em 0em;
+}
+
+.download {
+  position: fixed;
+  top: 1rem;
+  right: 12rem;
   padding: 0.5em 0em;
 }
 

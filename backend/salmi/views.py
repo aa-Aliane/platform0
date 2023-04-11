@@ -8,7 +8,9 @@ from rest_framework.decorators import (
     permission_classes,
     authentication_classes,
 )
-
+import pandas as pd
+import pdfkit as pdf
+from tqdm import tqdm
 
 
 class WordViewSet(viewsets.ModelViewSet):
@@ -105,6 +107,82 @@ def post_word(request):
         context.save()
 
     return Response(status=status.HTTP_200_OK, data="word added successfuly")
+
+
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def download(request):
+    words = Word.objects.all()
+
+    words_dict = []
+
+    for w in tqdm(words):
+        contexts = Context.objects.filter(word=w.id)
+        words_dict += [
+            {
+                "contexts": contexts,
+                "definition": w.definition,
+                "word_fr": w.word_fr,
+                "word_en": w.word_en,
+                "word": w.word,
+            }
+        ]
+
+    words_df = pd.DataFrame(words_dict)
+    words_df.columns = [
+        "السياقات",
+        "الشرح",
+        "الكلمة بالفرنسية",
+        "الكلمة بالإنجليجية",
+        "الكلمة",
+    ]
+
+    css = """
+    table {
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    }
+
+    th {
+    background-color: #dddddd;
+    }
+    """
+
+    with open("./salmi.html", "w", encoding="UTF-8") as f:
+        f.write(
+            words_df.to_html(
+                classes="my-table",
+                index=False,
+                header=True,
+                escape=False,
+                na_rep="",
+                float_format=None,
+                decimal=".",
+                formatters=None,
+                columns=None,
+                col_space=None,
+                table_id=None,
+                notebook=False,
+                border=None,
+            )
+            + f"<style>{css}</style>"
+        )
+
+    output = "./salmi.pdf"
+
+    pdf.from_file(
+        "/home/amine/projects/cerist/salmi/platform0/backend/salmi.html",
+        output,
+        options={"encoding": "utf-8"},
+    )
+
+    print(words_df.columns)
 
 
 # import pandas as pd
