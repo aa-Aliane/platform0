@@ -1,0 +1,23 @@
+.dict {
+  margin: 0 auto;
+  width: 70%;
+  display: flex;
+  padding: 2rem;
+  padding-top: 10rem;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__instance {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    & div {
+      grid-column: 1 / 2;
+    }
+
+    & div:last-child {
+      grid-column: 2 / 3;
+      grid-row: 1 / 4;
+    }
+  }
+}

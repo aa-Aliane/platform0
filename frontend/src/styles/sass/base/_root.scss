@@ -18,6 +18,32 @@
     --fw-#{$key}: #{$value};
   }
 
-  --ff-primary : 'EB Garamond', serif;
-  --default-radius: .5rem;
+  --ff-primary: "EB Garamond", serif;
+  --default-radius: 0.5rem;
+}
+
+// colors
+@each $clr, $shades in $colors {
+  @each $key, $value in $shades {
+    .clr-#{$clr}-#{$key} {
+      color: var(--clr-#{$clr}-#{$key});
+    }
+    .bg-#{$clr}-#{$key} {
+      background-color: var(--clr-#{$clr}-#{$key});
+    }
+  }
+}
+
+//   fonts sizes
+@each $key, $value in $font-sizes {
+  .fs-#{$key} {
+    font-size: var(--fs-#{$key});
+  }
+}
+
+//   fonts weights
+@each $key, $value in $font-weights {
+  .fw-#{$key} {
+    font-weight: var(--fw-#{$key});
+  }
 }

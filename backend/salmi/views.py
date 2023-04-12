@@ -5,6 +5,7 @@ from rest_framework import viewsets, status, permissions, authentication
 from rest_framework.response import Response
 from django.http import FileResponse
 from rest_framework.decorators import (
+    action,
     api_view,
     permission_classes,
     authentication_classes,
@@ -23,6 +24,14 @@ class WordViewSet(viewsets.ModelViewSet):
     serializer_class = WordSerializer
     permission_classes = [permissions.AllowAny]
 
+    @action(detail=False)
+    def get_words_range(self, request, pk=None):
+        start = int(request.query_params.get("start", 0))
+        end = int(request.query_params.get("end", 10))
+        words = self.queryset[start:end]
+        serializer = self.get_serializer(words, many=True)
+        return Response(serializer.data)
+
 
 class ContextViewSet(viewsets.ModelViewSet):
     queryset = Context.objects.all()
@@ -37,9 +46,8 @@ def login(request):
 
 
 @api_view(["POST"])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 def get_context(request):
-    word = Word.objects.get(id=request.data["word_id"])
     context = Context.objects.filter(word=request.data["word_id"])
     response = ContextSerializer(context, many=True)
 
