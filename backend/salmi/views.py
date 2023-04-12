@@ -3,6 +3,7 @@ from .models import Word, Context
 from .serializers import WordSerializer, ContextSerializer
 from rest_framework import viewsets, status, permissions, authentication
 from rest_framework.response import Response
+from django.http import FileResponse
 from rest_framework.decorators import (
     api_view,
     permission_classes,
@@ -11,6 +12,10 @@ from rest_framework.decorators import (
 import pandas as pd
 import pdfkit as pdf
 from tqdm import tqdm
+
+import os
+
+os.environ["DISPLAY"] = ":0.0"
 
 
 class WordViewSet(viewsets.ModelViewSet):
@@ -120,18 +125,27 @@ def download(request):
         contexts = Context.objects.filter(word=w.id)
         words_dict += [
             {
-                "contexts": contexts,
-                "definition": w.definition,
+                "contexts": [c.context for c in contexts],
                 "word_fr": w.word_fr,
                 "word_en": w.word_en,
                 "word": w.word,
             }
         ]
 
+    # Modify the words_dict to display contexts as unordered list
+    for i, w in enumerate(words_dict):
+        context_list = "<ul>"
+        for context in w["contexts"]:
+            context_list += f"<li>{context}</li>"
+        context_list += "</ul>"
+        if context_list != "<ul></ul>":
+            words_dict[i]["contexts"] = context_list
+        else:
+            words_dict[i]["contexts"] = ""
+
     words_df = pd.DataFrame(words_dict)
     words_df.columns = [
         "السياقات",
-        "الشرح",
         "الكلمة بالفرنسية",
         "الكلمة بالإنجليجية",
         "الكلمة",
@@ -143,10 +157,31 @@ def download(request):
     width: 100%;
     }
 
+    @font-face {{
+        font-family: 'Amiri';
+        src: url('{% static 'AmiriQuran-Regular.ttf' %}') format('truetype');
+    }}
+
     td, th {
     border: 1px solid #dddddd;
-    text-align: left;
+    text-align: right;
     padding: 8px;
+    font-size: 1rem;
+    font-family: 'Amiri', sans-serif;
+    }
+
+    ul, li {
+    text-align: right;
+    direction: rtl;
+    }
+
+    p {
+    font-size: 1rem;
+    }
+
+    h1 {
+    font-size: 1.8rem;
+    font-family: 'Amiri', sans-serif;
     }
 
     th {
@@ -154,35 +189,55 @@ def download(request):
     }
     """
 
-    with open("./salmi.html", "w", encoding="UTF-8") as f:
-        f.write(
-            words_df.to_html(
-                classes="my-table",
-                index=False,
-                header=True,
-                escape=False,
-                na_rep="",
-                float_format=None,
-                decimal=".",
-                formatters=None,
-                columns=None,
-                col_space=None,
-                table_id=None,
-                notebook=False,
-                border=None,
-            )
-            + f"<style>{css}</style>"
-        )
+    html_string = f"""<html><head>
+            <meta charset="utf-8">
+        </head>
+        {words_df.to_html(
+            classes="my-table",
+            index=False,
+            header=True,
+            escape=False,
+            na_rep="",
+            float_format=None,
+            decimal=".",
+            formatters=None,
+            columns=None,
+            col_space=None,
+            table_id=None,
+            notebook=False,
+            border=None,
+        )}
+        <style>{css}</style>
+    </html>"""
 
-    output = "./salmi.pdf"
+    html_string = f"""
+        <h1 style="text-align: center;">قاموس المفردات</h1>
+            <p style="text-align: center;">إجمالي عدد الكلمات:{len(words_df)}, عدد الكلمات التي تمت إضافة سياق لها:{len(words_dict)}</p>
+        <hr>
+        {html_string}
+    """
 
-    pdf.from_file(
-        "/home/amine/projects/cerist/salmi/platform0/backend/salmi.html",
+    output = "./salammm.pdf"
+
+    options = {
+        "encoding": "utf-8",
+        "page-size": "A4",
+        "margin-top": "2cm",
+        "margin-right": "2cm",
+        "margin-bottom": "2cm",
+        "margin-left": "2cm",
+    }
+
+    pdf.from_string(
+        html_string,
         output,
-        options={"encoding": "utf-8"},
+        options=options,
     )
 
-    print(words_df.columns)
+    pdf_file = open(output, "rb")
+    response = FileResponse(pdf_file, as_attachment=True, filename="salmi.pdf")
+
+    return response
 
 
 # import pandas as pd

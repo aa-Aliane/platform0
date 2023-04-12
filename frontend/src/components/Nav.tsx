@@ -35,9 +35,18 @@ const Nav = () => {
           <div
             className="btn btn__new fs-m"
             onClick={() => {
-              api.get("download/").then((res: any) => {
-                console.log(res.data);
-              });
+              api
+                .get("download/", {
+                  responseType: "blob", // tell axios to expect a binary response
+                })
+                .then((res: any) => {
+                  const url = window.URL.createObjectURL(new Blob([res.data]));
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.setAttribute("download", "salmi.pdf");
+                  document.body.appendChild(link);
+                  link.click();
+                });
             }}
           >
             <p>تحميل</p>

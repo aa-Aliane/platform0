@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 import Main from "./pages/Main";
 import NewWord from "./pages/NewWord";
 import ChangeWord from "./pages/changeWord";
+import Dict from "./pages/Dict";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/change_word",
     element: <ChangeWord />,
+  },
+  {
+    path: "/dictionnary",
+    element: <Dict />,
   },
 ]);
 
