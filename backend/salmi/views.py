@@ -70,6 +70,7 @@ def update_word(request):
     word.word = request.data["word_ar"]
     word.word_en = request.data["word_en"]
     word.word_fr = request.data["word_fr"]
+    word.definition = request.data["def"]
 
     contexts = Context.objects.filter(word=request.data["word_id"])
     for c in contexts:
@@ -97,6 +98,7 @@ def post_word(request):
         word=request.data["word_ar"],
         word_en=request.data["word_en"],
         word_fr=request.data["word_fr"],
+        definition=request.data["def"],
         created_at=0,
     )
 

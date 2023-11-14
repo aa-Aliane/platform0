@@ -30,21 +30,21 @@ const Context = () => {
   return (
     <div className="context--container">
       <div className="context">
-        <h2 className="title">السياق</h2>
+        <h4 className="title">السياق</h4>
         <textarea
           className="context__content"
           value={context.context}
           data-error={contextError}
           onChange={(e) => setContext(e.target.value, "context")}
           onClick={() => setContextError("false")}
-          placeholder={context.context==="" ? "يرجى كتابة السياق" : ""}
+          placeholder={context.context === "" ? "يرجى كتابة السياق" : ""}
         ></textarea>
       </div>
 
       <div className="keywords--container">
-        <h2 className="title">
+        <h4 className="title">
           المصطلاحات المفاتيح ذات العلاقة الموجودة في السياق
-        </h2>
+        </h4>
         <div className="keywords">
           <input
             className="keywords__title"
@@ -77,7 +77,7 @@ const Context = () => {
       </div>
 
       <div className="ref--container">
-        <h2 className="ref">المرجع</h2>
+        <h4 className="ref">المرجع</h4>
         <input
           type="text"
           value={context.ref}

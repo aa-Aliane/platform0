@@ -78,6 +78,7 @@ const ChangeWord = () => {
     word_ar: "",
     word_fr: "",
     word_en: "",
+    def: "",
   });
 
   const [step, setStep] = useState(1);
@@ -87,6 +88,7 @@ const ChangeWord = () => {
       setEntry(res.data.word, "word_ar");
       setEntry(res.data.word_en, "word_en");
       setEntry(res.data.word_fr, "word_fr");
+      setEntry(res.data.definition, "def");
     });
     api.post("get_context/", { word_id: word }).then((res) => {
       init_contexts(res.data);
@@ -105,7 +107,7 @@ const ChangeWord = () => {
   return (
     <div className="main--container">
       <div className="word--container">
-        <h2 className="title">المصطلح</h2>
+        <h4 className="title">المصطلح</h4>
         <div className="new--word">
           <input
             type="text"
@@ -131,8 +133,17 @@ const ChangeWord = () => {
         </div>
       </div>
 
+      <div className="definition">
+        <textarea
+          className="definition__content"
+          placeholder="التعريف"
+          value={entry.def}
+          onChange={(e) => setEntry(e.target.value, "def")}
+        ></textarea>
+      </div>
+
       <div className="contexts">
-        <h2 className="title">السياقات</h2>
+        <h4 className="title">السياقات</h4>
         {!addContext && (
           <div
             className="btn btn__new context__new"
@@ -169,6 +180,7 @@ const ChangeWord = () => {
                   word_ar: entry.word_ar,
                   word_en: entry.word_en,
                   word_fr: entry.word_fr,
+                  def: entry.def,
                   contexts: contexts,
                   word_id: word,
                 })
@@ -181,6 +193,7 @@ const ChangeWord = () => {
                     word_ar: entry.word_ar,
                     word_en: entry.word_en,
                     word_fr: entry.word_fr,
+                    def: entry.def,
                     contexts: contexts,
                     word_id: word,
                   });

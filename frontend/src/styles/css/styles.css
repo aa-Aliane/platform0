@@ -104,6 +104,10 @@ body {
   direction: rtl;
 }
 
+h4 {
+  font-size: var(--fs-l);
+}
+
 .main--container {
   width: 50%;
   margin-left: auto;
@@ -182,6 +186,16 @@ body {
 .word[deleted_state=true] {
   overflow: hidden;
   height: 0;
+}
+
+.definition {
+  padding: 1.2rem;
+  display: flex;
+}
+.definition__content {
+  margin: 0 auto;
+  width: 80%;
+  border: 2px solid var(--clr-neutral-400);
 }
 
 .menu {

@@ -85,6 +85,17 @@
   height: 0;
 }
 
+.definition {
+  padding: 1.2rem;
+  display: flex;
+
+  &__content {
+    margin: 0 auto;
+    width: 80%;
+    border: 2px solid var(--clr-neutral-400);
+  }
+}
+
 .menu {
   display: flex;
   align-items: center;
