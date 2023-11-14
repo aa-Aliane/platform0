@@ -8,6 +8,32 @@
   color: var(--clr-neutral-100);
   cursor: pointer;
 
+  &__icon {
+    font-size: 1rem;
+  }
+
+  &--pagination {
+    width: 2rem;
+    height: 2rem;
+    padding: 1em;
+    font-weight: var(--fw-medium);
+    background-color: var(--clr-neutral-200);
+    color: var(--clr-primary-900);
+    border: none;
+
+
+    &:hover {
+      box-shadow: 0 0 2px 2px var(--clr-neutral-400);
+      color: var(--clr-primary-900);
+    }
+
+    &[data-selected="true"] {
+      border: 0.1rem solid var(--clr-primary-900);
+      background-color: var(--clr-primary-200);
+      color: var(--clr-primary-900);
+    }
+  }
+
   &__edit {
     background-color: var(--clr-primary-300);
     &:hover {
@@ -44,7 +70,7 @@
   }
 
   @media (max-width: 700px) {
-    padding: .2em .4em;
+    padding: 0.2em 0.4em;
     &__text {
       display: none;
     }

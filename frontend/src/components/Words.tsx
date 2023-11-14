@@ -2,6 +2,8 @@ import React, { useReducer, useEffect, useState } from "react";
 import Button from "./Button";
 
 import { useWords } from "../hooks/wordsState";
+import { usePagination } from "../hooks/paginationState";
+import { Pagination, PaginationInfo } from "../components/Pagination";
 import { api } from "../services/api";
 import { useNavigate } from "react-router";
 import { actions } from "../hooks/actions";
@@ -32,6 +34,18 @@ const Words: React.FC = () => {
   const delete_word = useWords((state: any) => state.delete_word);
   const select_word = useWords((state: any) => state.select_word);
 
+  // pagination
+  const current_page = usePagination((state: any) => state.current_page);
+  const words_per_page = usePagination((state: any) => state.words_per_page);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(Math.min(words.length, 10));
+
+  useEffect(() => {
+    setStart(current_page * words_per_page - words_per_page);
+    setEnd(Math.min(current_page * words_per_page, words.length));
+  }, [, current_page, words_per_page, words]);
+
+  // ***************************
   const navigate = useNavigate();
 
   const filterWords = (ws: wordType[]) => {
@@ -51,6 +65,8 @@ const Words: React.FC = () => {
       );
     });
   }, []);
+
+  useEffect(() => {}, [words]);
 
   const postFailedWordDel = (id: any) => {
     const refresh = localStorage.getItem("refresh");
@@ -94,34 +110,44 @@ const Words: React.FC = () => {
 
   return (
     <div className="words">
-      <>
-        {filter}
-        {filterWords(words).map((w: wordType, i: number) => (
-          <div className="word" state-hidden={words[i].is_deleted} key={i}>
-            <div className="word__content">{w.word}</div>
+      <PaginationInfo nb_words={words.length} />
+      <ul className="words__container">
+        <>
+          {filterWords(words)
+            .slice(start, end)
+            .map((w: wordType, i: number) => (
+              <li className="word" state-hidden={words[i].is_deleted} key={i}>
+                <div className="word__content">{w.word}</div>
 
-            <Button
-              name={w.name}
-              icon={"delete"}
-              HandleClick={HandleClick}
-              id={w.id}
-              index={i}
-            />
-            <Button
-              name={"مراجعة"}
-              icon={"edit"}
-              HandleClick={HandleClick}
-              id={w.id}
-              index={i}
-            />
-            <span
-              className="word--selector"
-              data-selected={w.is_selected}
-              onClick={() => select_word(i, !w.is_selected)}
-            ></span>
-          </div>
-        ))}
-      </>
+                <Button
+                  name={w.name}
+                  icon={"delete"}
+                  HandleClick={HandleClick}
+                  id={w.id}
+                  index={i}
+                />
+                <Button
+                  name={"مراجعة"}
+                  icon={"edit"}
+                  HandleClick={HandleClick}
+                  id={w.id}
+                  index={i}
+                />
+                <span
+                  className="word--selector"
+                  data-selected={w.is_selected}
+                  onClick={() =>
+                    select_word(
+                      words_per_page * (current_page - 1) + i,
+                      !w.is_selected
+                    )
+                  }
+                ></span>
+              </li>
+            ))}
+        </>
+      </ul>
+      <Pagination />
     </div>
   );
 };

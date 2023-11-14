@@ -24,7 +24,7 @@
   --fw-bold: 700;
   --fw-extra-bold: 800;
   --ff-primary: "EB Garamond", serif;
-  --default-radius: .5rem;
+  --default-radius: 5px;
 }
 
 /* Box sizing rules */
@@ -137,6 +137,16 @@ body {
   flex-direction: column;
   gap: 2rem;
 }
+.words__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nbwords-info {
+  text-align: center;
+  opacity: 0.7;
+}
 
 .word {
   display: flex;
@@ -151,9 +161,9 @@ body {
   width: 30%;
 }
 .word--selector {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.3rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 2px;
   background-color: var(--clr-neutral-400);
   cursor: pointer;
 }
@@ -163,7 +173,7 @@ body {
 }
 .word--selector:focus, .word--selector:active {
   background-color: var(--clr-primary-400);
-  border: 0.2rem solid var(--clr-neutral-600);
+  box-shadow: 0 0 5px 5px var(--clr-neutral-400);
 }
 .word--selector[data-selected=true] {
   background-color: var(--clr-primary-400);
@@ -385,6 +395,27 @@ body {
   color: var(--clr-neutral-100);
   cursor: pointer;
 }
+.btn__icon {
+  font-size: 1rem;
+}
+.btn--pagination {
+  width: 2rem;
+  height: 2rem;
+  padding: 1em;
+  font-weight: var(--fw-medium);
+  background-color: var(--clr-neutral-200);
+  color: var(--clr-primary-900);
+  border: none;
+}
+.btn--pagination:hover {
+  box-shadow: 0 0 2px 2px var(--clr-neutral-400);
+  color: var(--clr-primary-900);
+}
+.btn--pagination[data-selected=true] {
+  border: 0.1rem solid var(--clr-primary-900);
+  background-color: var(--clr-primary-200);
+  color: var(--clr-primary-900);
+}
 .btn__edit {
   background-color: var(--clr-primary-300);
 }
@@ -442,6 +473,37 @@ textarea:focus, textarea :active, input:focus, input :active {
 
 textarea {
   resize: none;
+}
+
+.pagination__info {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 0 0.2rem 0.2rem var(--clr-neutral-400);
+  padding: 1rem 2rem;
+}
+.pagination__info ul {
+  display: flex;
+  gap: 0.5rem;
+}
+.pagination__info ul li {
+  padding-right: 0.5rem;
+  border-right: 2px solid var(--clr-neutral-400);
+  cursor: pointer;
+}
+.pagination__info ul li:hover {
+  color: var(--clr-primary-700);
+}
+.pagination__info ul[data-lang=ar] {
+  flex-direction: row-reverse;
+}
+.pagination__pages {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0 auto;
 }
 
 /*# sourceMappingURL=styles.css.map */

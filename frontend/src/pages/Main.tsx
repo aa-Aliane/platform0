@@ -26,7 +26,6 @@ const Main = () => {
               <FontAwesomeIcon icon={faSignOut} />
             </span>
           </div>
-          
           <Nav />
           <Words />
         </main>

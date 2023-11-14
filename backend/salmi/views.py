@@ -212,7 +212,7 @@ def download(request):
 
     html_string = f"""
         <h1 style="text-align: center;">قاموس المفردات</h1>
-            <p style="text-align: center;">إجمالي عدد الكلمات:{len(words_df)}, عدد الكلمات التي تمت إضافة سياق لها:{len(words_dict)}</p>
+            <p style="text-align: center;">إجمالي عدد الكلمات:{len(words_df)}, عدد الكلمات التي تمت إضافة سياق لها:{sum(1 for word in words_dict if word['contexts'])}</p>
         <hr>
         {html_string}
     """
