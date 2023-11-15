@@ -163,7 +163,7 @@ const ChangeWord = () => {
               HandleDelete={HandleDelete}
             />
           )}
-          {previews[index] && <OldContext word_id={word.id} index={index} />}
+          {previews[index] && <OldContext index={index} />}
         </>
       ))}
 

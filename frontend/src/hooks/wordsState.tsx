@@ -2,7 +2,6 @@ import create from "zustand";
 import { wordType } from "../components/Words";
 import { api } from "../services/api";
 
-
 export type wordsStateType = wordType[];
 
 export interface wordsActionType {
@@ -10,17 +9,31 @@ export interface wordsActionType {
   payload: number;
 }
 
-
+const postFailedWordDel = (id: any) => {
+  const refresh = localStorage.getItem("refresh");
+  api.post("token/refresh/", { refresh: refresh }).then((res) => {
+    localStorage.setItem("access", res.data.access);
+    api.defaults.headers.common["Authorization"] = `Bearer ${res.data.access}`;
+  });
+  api.delete("words/" + String(id));
+};
 
 export const useWords = create((set) => ({
+  updated: false,
   n_words: 0,
+  n_filtered: 0,
   n_selected: 0,
   d_selected_step: 0,
   words: [],
+  filtered: [],
   filter: "",
   display_words: [],
+  set_updated: (value: Boolean) =>
+    set(() => ({
+      updated: value,
+    })),
   refresh: () =>
-    set((state: any) => {
+    set(() => {
       const refresh = localStorage.getItem("refresh");
       api.post("token/refresh/", { refresh: refresh }).then((res) => {
         localStorage.setItem("access", res.data.access);
@@ -30,19 +43,25 @@ export const useWords = create((set) => ({
       });
     }),
   setFilter: (filter: string) =>
-    set((state: any) => ({
+    set(() => ({
       filter: filter,
     })),
   init_words: (words: wordType[]) =>
-    set((state: any) => ({
+    set(() => ({
       words: words.map((w: any) => {
         return { ...w, is_selected: false };
       }),
       n_words: words.length,
     })),
+  set_filtered: (ws: wordType[]) =>
+    set(() => ({
+      filtered: ws.map((w: any) => {
+        return w;
+      }),
+    })),
   confirm_delete: (index: number) =>
     set((state: any) => ({
-      words: state.words.map((w: wordType, i: number) => {
+      filtered: state.filtered.map((w: wordType, i: number) => {
         if (i === index) {
           const ret = w;
           w.step += 1;
@@ -51,10 +70,14 @@ export const useWords = create((set) => ({
         return w;
       }),
     })),
-  delete_word: (index: number) =>
+  delete_word: (index: number, id: number) =>
     set((state: any) => ({
-      words: state.words.filter((w: wordType, i: number) => i !== index),
+      filtered: state.filtered.filter((w: any, i: number) => {
+        if (i !== index) return true;
+        api.delete("words/" + String(id)).catch((err) => postFailedWordDel(id));
+      }),
       n_words: state.n_words - 1,
+      updated: true,
     })),
 
   confirm_d_selected: () =>
@@ -64,7 +87,7 @@ export const useWords = create((set) => ({
     })),
   delete_selected: () =>
     set((state: any) => ({
-      words: state.words.filter((w: wordType) => {
+      filtered: state.filtered.filter((w: wordType) => {
         if (!w.is_selected) return w;
         api.delete("words/" + String(w.id)).catch((err) => {
           const refresh = localStorage.getItem("refresh");
@@ -84,7 +107,7 @@ export const useWords = create((set) => ({
 
   select_word: (index: number, value: Boolean) =>
     set((state: any) => ({
-      words: state.words.map((w: wordType, i: number) => {
+      filtered: state.filtered.map((w: wordType, i: number) => {
         if (i === index) return { ...w, is_selected: value };
         else return w;
       }),
